@@ -1,9 +1,9 @@
 const Discord = require('discord.io');
 const logger = require('winston');
 const axios = require('axios');
-const disAuth = require('./discord.json');
-const twiAuth = require('./twitch.json');
-const hook = require('./webhook.json');
+const disAuth = require('./auth/discord.json');
+const twiAuth = require('./auth/twitch.json');
+const hook = require('./auth/webhook.json');
 const tmi = require('tmi.js');
 
 // Configure logger settings
