@@ -70,10 +70,10 @@ function runBotCommands(message, user, twi) {
         // Feed Chat to Stream
         if (twi)
             axios.post(hook.url, {
-                content: `${message} - Pika! *obo ${user} from Twitch`
+                content: `${message} \n\t\t\t\t\t:: *obo ${user} from Twitch`
             })
-        else if(message.indexOf('Pika! *OBO') < 0)
-            twiBot.say(twiAuth.channels[0], `${message} - Pika! *obo ${user} from Discord`);
+        else if(message.indexOf('\t:: *obo') < 0)
+            twiBot.say(twiAuth.channels[0], `${message} \n\t\t\t\t\t:: *obo ${user} from Discord`);
     }
 }
 
