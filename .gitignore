@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+pika-bot/discord.json
+pika-bot/twitch.json
+pika-bot/webhook.json
