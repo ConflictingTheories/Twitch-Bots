@@ -69,7 +69,7 @@ function runBotCommands(message, user, twi) {
         }
     } else {
         // Feed Chat to Stream
-        if (blackList.filter(x=>x!==user)) {
+        if (blackList.filter(x=>x==user).length > 0) {
             if (twi)
                 axios.post(hook.url, {
                     content: `**${message}** \n\t\t\t\t\t:: *obo **${user}** from  Twitch*`

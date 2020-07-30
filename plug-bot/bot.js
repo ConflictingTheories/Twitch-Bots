@@ -8,7 +8,7 @@ const seeds = require('./plugs/seeds.json');
 const tmi = require('tmi.js');
 
 // Interval for Running our Plugs
-const INTERVAL_LENGTH = 30 * 1000; // 30s (30000ms)
+const INTERVAL_LENGTH = 30 * 10000; // 30s (30000ms)
 
 let plugInterval = null;
 let plugContainer = [];
@@ -52,19 +52,19 @@ function initBot() {
     });
     twiBot.on('message', onTwitchMessageHandler);
     twiBot.connect();
-
+    // Seed
     console.log('-- Seeding Plugs')
-    seeds.map(plugObj => {
-        let cleanPlug = {
+    plugContainer = seeds.map(plugObj => {
+        return {
             url: plugObj.url.match(/http[s]?:\/\//i).length > 0 ? '' + plugObj.url : 'https://' + plugObj.url,
             tag: ('' + plugObj.tag).slice(0, 27),
             msg: ('' + plugObj.msg).slice(0, 140),
             expiration: plugObj.expiration ? new Date(plugObj.expiration).getTime() : -1,
             count: +plugObj.count || -1,
-        };
-        plugContainer.push(cleanPlug);
-        console.log('--Plug Seeded', cleanPlug)
-    })
+        }
+    });
+    // Start
+    startBot();
 }
 
 // Message Handlers
@@ -117,6 +117,7 @@ function runBotCommands(message, user, twi) {
 
 // Core Output
 function shamelesslyPlugAway() {
+    console.log('--just plugging')
     // Where we perform our output
     let n = plugContainer.length;
     if (n) {
@@ -126,10 +127,10 @@ function shamelesslyPlugAway() {
         axios.post(hook.url, { content: `${x.url} - *${x.msg}* : ${x.tag}` })
         // Twitch (No Formatting)
         twiBot.say(twiAuth.channels[0], `${x.url} - *${x.msg}* : ${x.tag}`);
-        if ((x.expiration >=0 && x.expiration < Date.now()) || x.count == 0)
+        if ((x.expiration >= 0 && x.expiration < Date.now()) || x.count == 0)
             plugContainer.filter((x, i) => i != index)
         else {
-            x.count = x.count > 0 ? x.count-1 : -1;
+            x.count = x.count > 0 ? x.count - 1 : -1;
             plugContainer[index] = x;
         }
     }
@@ -139,7 +140,7 @@ function shamelesslyPlugAway() {
 // Misc Functions / Commands
 function startBot() {
     console.log('-- Starting Bot')
-    plugInterval = plugInterval ? setInterval(shamelesslyPlugAway, INTERVAL_LENGTH) : plugInterval;
+    plugInterval = plugInterval ? plugInterval : setInterval(shamelesslyPlugAway, INTERVAL_LENGTH);
 }
 
 function stopBot() {
