@@ -4,6 +4,7 @@ const axios = require('axios');
 const disAuth = require('./auth/discord.json');
 const twiAuth = require('./auth/twitch.json');
 const hook = require('./auth/webhook.json');
+const blackList = require('./auth/blacklist.json');
 const tmi = require('tmi.js');
 
 // Configure logger settings
@@ -42,18 +43,18 @@ twiBot.connect();
 
 // Message Handlers
 function onDiscordMessageHandler(user, userID, channelID, message, evt) {
-    runBotCommands(message, user, false);
+    runBotCommands(message, evt.d.author.username, false);
 }
 function onTwitchMessageHandler(target, context, msg, self) {
     if (self) { return; }
     const commandName = msg.trim();
-    runBotCommands(commandName, target, true);
+    runBotCommands(commandName, context.username, true);
 }
 
 
 // === Commands
 function runBotCommands(message, user, twi) {
-    if (message.substring(0, 1) == '!') {
+    if (message.substring(0, 2) == '#!') {
         var args = message.substring(1).split(' ');
         var cmd = args[0];
         args = args.splice(1);
@@ -68,12 +69,14 @@ function runBotCommands(message, user, twi) {
         }
     } else {
         // Feed Chat to Stream
-        if (twi)
-            axios.post(hook.url, {
-                content: `${message} \n\t\t\t\t\t:: *obo ${user} from Twitch`
-            })
-        else if(message.indexOf('\t:: *obo') < 0)
-            twiBot.say(twiAuth.channels[0], `${message} \n\t\t\t\t\t:: *obo ${user} from Discord`);
+        if (blackList.filter(x=>x!==user)) {
+            if (twi)
+                axios.post(hook.url, {
+                    content: `**${message}** \n\t\t\t\t\t:: *obo **${user}** from  Twitch*`
+                })
+            else if (message.indexOf('\t:: *obo') < 0)
+                twiBot.say(twiAuth.channels[0], `${message} \n\t\t\t\t\t:: *obo **${user}** from Discord*`);
+        }
     }
 }
 
