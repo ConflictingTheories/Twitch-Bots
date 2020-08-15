@@ -1,2 +1,2 @@
 # Twitch-Bots
-Various Bots for Twitch &amp; Discord to help with Streams and Engagement.
+Various Bots &amp; Extensions for Twitch &amp; Discord to help with Streams and Engagement.

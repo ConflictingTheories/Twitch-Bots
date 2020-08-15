@@ -1,0 +1,16 @@
+{
+    "name": "plug-bot",
+    "version": "1.0.0",
+    "description": "Shamelessly Plugs Content",
+    "main": "bot.js",
+    "author": "Kyle Derby MacInnis",
+    "scripts": {
+        "start": "node bot.js"
+    },
+    "dependencies": {
+        "axios": "^0.19.2",
+        "discord.io": "github:woor/discord.io#gateway_v6",
+        "tmi.js": "^1.5.0",
+        "winston": "^3.3.3"
+    }
+}
