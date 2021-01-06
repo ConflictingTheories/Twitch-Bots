@@ -8,7 +8,7 @@
         "start": "node bot.js"
     },
     "dependencies": {
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "discord.io": "github:woor/discord.io#gateway_v6",
         "tmi.js": "^1.5.0",
         "winston": "^3.3.3"
